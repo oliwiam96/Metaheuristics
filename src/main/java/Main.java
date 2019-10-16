@@ -13,26 +13,28 @@ public class Main {
         array[secondIndex] = temp;
     }
 
+    private static int[] getPermutation(int N) {
+        int[] indexes = IntStream.range(0, N).toArray();
+        int lastIndex = N;
+        Random random = new Random();
+        for (int j = 0; j < N; j++) {
+            int randomInteger = random.nextInt(lastIndex);
+            swap(indexes, randomInteger, lastIndex - 1);
+            lastIndex -= 1;
+        }
+        return indexes;
+    }
+
     private static List<int[]> getPermutations(int N, int numberOfPermutations) {
         List<int[]> permutations = new ArrayList<>();
-
         for (int i = 0; i < numberOfPermutations; i++) {
-            int[] indexes = IntStream.range(0, N).toArray();
-            int lastIndex = N;
-            Random random = new Random();
-            for (int j = 0; j < N; j++) {
-                int randomInteger = random.nextInt(lastIndex);
-                swap(indexes, randomInteger, lastIndex - 1);
-                lastIndex -= 1;
-            }
-            permutations.add(indexes);
+            permutations.add(getPermutation(N));
         }
-
         return permutations;
     }
 
     private static void doAlgorithm() {
-        int N = 10;
+        int N = 10000000;
         List<int[]> permutations = getPermutations(N, 3);
     }
 
