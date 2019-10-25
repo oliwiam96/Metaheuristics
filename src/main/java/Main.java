@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -52,7 +52,41 @@ public class Main {
         return ((double) (endTime - startTime)) / counter;
     }
 
+    public static int findMinIndex(int[] row, Set notVisited) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = 0;
+        for (int i = 0; i < row.length; i++) {
+            if (row[i] < min && notVisited.contains(i)) {
+                min = row[i];
+                minIndex = i;
+            }
+        }
+        notVisited.remove(minIndex);
+        return minIndex;
+    }
+
+    public static void heuristic(Instance instance) {
+        int[] solution = new int[instance.getDimension()];
+        solution[0] = 0;
+        Set<Integer> notVisited = new HashSet<>();
+        for (int i = 1; i < solution.length; i++) {
+            notVisited.add(i);
+        }
+        for (int i = 1; i < solution.length; i++) {
+            int nextCity = findMinIndex(instance.getEdges()[i - 1], notVisited);
+            solution[i] = nextCity;
+        }
+        System.out.println(Arrays.toString(solution));
+    }
+
     public static void main(String[] args) {
+
+        try {
+            Instance instance = new Instance(new File("Instances/PK66_10.atsp"));
+            heuristic(instance);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("CJU: " + getCJU());
     }
 }
