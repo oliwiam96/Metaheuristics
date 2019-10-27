@@ -67,4 +67,25 @@ public class Instance {
         }
         return cost;
     }
+
+    /***
+     * If > 0 then swap is profitable.
+     * @param firstIndex first index to swap
+     * @param secondIndex second index to swap
+     * @param solution permutation of indexes
+     * @return difference between old cost and cost after swap.
+     */
+    public int getImprovement(int firstIndex, int secondIndex, int[] solution) {
+        int costBeforeSwap = edges[solution[(firstIndex - 1 + dimension) % dimension]][solution[firstIndex]]
+                + edges[solution[firstIndex]][solution[(firstIndex + 1) % dimension]]
+                + edges[solution[(secondIndex - 1 + dimension) % dimension]][solution[secondIndex]]
+                + edges[solution[secondIndex]][solution[(secondIndex + 1) % dimension]];
+
+        int costAfterSwap = edges[solution[(firstIndex - 1 + dimension) % dimension]][solution[secondIndex]]
+                + edges[solution[secondIndex]][solution[(firstIndex + 1) % dimension]]
+                + edges[solution[(secondIndex - 1 + dimension) % dimension]][solution[firstIndex]]
+                + edges[solution[firstIndex]][solution[(secondIndex + 1) % dimension]];
+
+        return costBeforeSwap - costAfterSwap;
+    }
 }

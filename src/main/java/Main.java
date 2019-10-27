@@ -78,13 +78,40 @@ public class Main {
         return solution;
     }
 
+    public static int[] getGreedySolution(int[] permutation, Instance instance) {
+        int firstIndex = 0;
+        int secondIndex = 1;
+        boolean stop = false;
+        for (int i = 0; i < 10000; i++) {
+            for (int j = 0; j < instance.getDimension(); j++) {
+                if (instance.getImprovement(firstIndex, secondIndex, permutation) > 0) {
+                    swap(permutation, firstIndex, secondIndex);
+                }
+                secondIndex += 1;
+                secondIndex = secondIndex % instance.getDimension();
+            }
+            firstIndex += 1;
+            firstIndex = firstIndex % instance.getDimension();
+
+        }
+        return permutation;
+    }
+
     public static void main(String[] args) {
         Instance instance = new Instance(new File("Instances/PK66_10.atsp"));
         int[] solution = getHeuristicSolution(instance);
 
         System.out.println(Arrays.toString(solution));
-        System.out.println("Cost: " + instance.getCost(solution));
+        System.out.println("Heuristic: " + instance.getCost(solution));
         System.out.println("Optimal: " + instance.getOptimalValue());
         System.out.println("CJU: " + getCJU());
+
+        int[] greedy = getGreedySolution(getPermutation(instance.getDimension()), instance);
+        System.out.println("Greedy: " + instance.getCost(greedy));
+        System.out.println(Arrays.toString(greedy));
+
+
+        int[] greedyWithH = getGreedySolution(solution, instance);
+        System.out.println("Greedy with H: " + instance.getCost(greedyWithH));
     }
 }
