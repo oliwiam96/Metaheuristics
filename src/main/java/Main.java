@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -7,7 +6,7 @@ public class Main {
     private static int MAX_COUNTER = 10;
     private static int MAX_MILLIS = 1000;
 
-    private static final void swap(int[] array, int firstIndex, int secondIndex) {
+    private static void swap(int[] array, int firstIndex, int secondIndex) {
         int temp = array[firstIndex];
         array[firstIndex] = array[secondIndex];
         array[secondIndex] = temp;
@@ -65,7 +64,7 @@ public class Main {
         return minIndex;
     }
 
-    public static void heuristic(Instance instance) {
+    public static int[] getHeuristicSolution(Instance instance) {
         int[] solution = new int[instance.getDimension()];
         solution[0] = 0;
         Set<Integer> notVisited = new HashSet<>();
@@ -76,17 +75,16 @@ public class Main {
             int nextCity = findMinIndex(instance.getEdges()[i - 1], notVisited);
             solution[i] = nextCity;
         }
-        System.out.println(Arrays.toString(solution));
+        return solution;
     }
 
     public static void main(String[] args) {
+        Instance instance = new Instance(new File("Instances/PK66_10.atsp"));
+        int[] solution = getHeuristicSolution(instance);
 
-        try {
-            Instance instance = new Instance(new File("Instances/PK66_10.atsp"));
-            heuristic(instance);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println(Arrays.toString(solution));
+        System.out.println("Cost: " + instance.getCost(solution));
+        System.out.println("Optimal: " + instance.getOptimalValue());
         System.out.println("CJU: " + getCJU());
     }
 }

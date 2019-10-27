@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Instance {
     private String name;
@@ -6,12 +9,11 @@ public class Instance {
     private int[][] edges;
     private int optimalValue;
 
-    public Instance(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        try {
+    public Instance(File file) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String words[] = line.split(" ");
+                String[] words = line.split(" ");
                 if (words[0].equals("NAME:")) {
                     this.name = words[1];
                 }
@@ -28,7 +30,7 @@ public class Instance {
                     while ((row = br.readLine()) != null) {
                         String[] values = row.split("\t");
                         for (int j = 0; j < this.dimension; j++) {
-                            edgeMatrix[i][j] = Integer.valueOf(values[j]);
+                            edgeMatrix[i][j] = Integer.parseInt(values[j]);
                         }
                         i++;
                     }
@@ -37,8 +39,6 @@ public class Instance {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            br.close();
         }
     }
 
@@ -56,5 +56,15 @@ public class Instance {
 
     public int getOptimalValue() {
         return optimalValue;
+    }
+
+    public int getCost(int[] solution) {
+        int cost = 0;
+        for (int i = 0; i < solution.length; i++) {
+            int currentIndex = solution[i];
+            int nextIndex = solution[(i + 1) % solution.length];
+            cost += edges[currentIndex][nextIndex];
+        }
+        return cost;
     }
 }
