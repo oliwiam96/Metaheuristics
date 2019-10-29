@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.server.ExportException;
 
 public class Instance {
     private String name;
@@ -27,17 +28,19 @@ public class Instance {
                     int[][] edgeMatrix = new int[this.dimension][this.dimension];
                     String row;
                     int i = 0;
-                    while ((row = br.readLine()) != null) {
+                    row = br.readLine();
+                    while ((row != null && !row.startsWith("EOF"))) {
                         String[] values = row.split("\t");
                         for (int j = 0; j < this.dimension; j++) {
-                            edgeMatrix[i][j] = Integer.parseInt(values[j]);
+                            edgeMatrix[i][j] = (int) Double.parseDouble(values[j]);
                         }
                         i++;
+                        row = br.readLine();
                     }
                     this.edges = edgeMatrix;
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

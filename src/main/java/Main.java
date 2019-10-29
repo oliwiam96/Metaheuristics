@@ -98,7 +98,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Instance instance = new Instance(new File("Instances/PK66_10.atsp"));
+        Instance instance = new Instance(new File("Instances/atex5.atsp"));
         int[] solution = getHeuristicSolution(instance);
 
         System.out.println(Arrays.toString(solution));
