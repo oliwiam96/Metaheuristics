@@ -1,3 +1,5 @@
+package parsers;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -57,41 +59,5 @@ public class Instance {
 
     public int getOptimalValue() {
         return optimalValue;
-    }
-
-    public int getCost(int[] solution) {
-        int cost = 0;
-        for (int i = 0; i < solution.length; i++) {
-            int currentIndex = solution[i];
-            int nextIndex = solution[(i + 1) % solution.length];
-            cost += edges[currentIndex][nextIndex];
-        }
-        return cost;
-    }
-
-    public double getScore(int[] solutrion) {
-        int cost = this.getCost(solutrion);
-        return (double) (cost - this.getOptimalValue()) / this.getOptimalValue();
-    }
-
-    /***
-     * If > 0 then swap is profitable.
-     * @param firstIndex first index to swap
-     * @param secondIndex second index to swap
-     * @param solution permutation of indexes
-     * @return difference between old cost and cost after swap.
-     */
-    public int getImprovement(int firstIndex, int secondIndex, int[] solution) {
-        int costBeforeSwap = edges[solution[(firstIndex - 1 + dimension) % dimension]][solution[firstIndex]]
-                + edges[solution[firstIndex]][solution[(firstIndex + 1) % dimension]]
-                + edges[solution[(secondIndex - 1 + dimension) % dimension]][solution[secondIndex]]
-                + edges[solution[secondIndex]][solution[(secondIndex + 1) % dimension]];
-
-        int costAfterSwap = edges[solution[(firstIndex - 1 + dimension) % dimension]][solution[secondIndex]]
-                + edges[solution[secondIndex]][solution[(firstIndex + 1) % dimension]]
-                + edges[solution[(secondIndex - 1 + dimension) % dimension]][solution[firstIndex]]
-                + edges[solution[firstIndex]][solution[(secondIndex + 1) % dimension]];
-
-        return costBeforeSwap - costAfterSwap;
     }
 }
