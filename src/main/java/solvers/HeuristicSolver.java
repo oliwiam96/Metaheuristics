@@ -47,9 +47,9 @@ public class HeuristicSolver extends Solver {
         for (int i = 1; i < permutation.length; i++) {
             int nextCity;
             if (antiH) {
-                nextCity = findMaxIndex(instance.getEdges()[i - 1], notVisited);
+                nextCity = findMaxIndex(instance.getEdges()[permutation[i - 1]], notVisited);
             } else {
-                nextCity = findMinIndex(instance.getEdges()[i - 1], notVisited);
+                nextCity = findMinIndex(instance.getEdges()[permutation[i - 1]], notVisited);
             }
 
             permutation[i] = nextCity;

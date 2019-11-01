@@ -81,12 +81,10 @@ public class Main {
         RandomSolver randomSolver = new RandomSolver(instance);
         randomSolver.solve();
         System.out.println("Random: " + randomSolver.getCost());
-        randomSolver.printPermutation();
 
         HeuristicSolver heuristicSolver = new HeuristicSolver(instance);
         heuristicSolver.solve();
         System.out.println("Heuristic: " + heuristicSolver.getCost());
-        heuristicSolver.printPermutation();
 
         GreedySolver greedySolver = new GreedySolver(instance);
         greedySolver.solve();
