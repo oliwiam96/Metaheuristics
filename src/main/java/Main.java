@@ -57,12 +57,12 @@ public class Main {
         try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 300; i++) {
-                Solver solver = new GreedySolver(instance);
-                double initialScore = solver.getScore();
+                GreedySolver greedySolver = new GreedySolver(instance);
+                greedySolver.solve();
+                double initialScore = greedySolver.getInitialScore();
                 sb.append(initialScore);
                 sb.append(", ");
-                solver.solve();
-                double finalScore = solver.getScore();
+                double finalScore = greedySolver.getScore();
                 sb.append(finalScore);
                 sb.append("\n");
             }

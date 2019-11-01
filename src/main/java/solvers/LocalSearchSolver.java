@@ -3,6 +3,8 @@ package solvers;
 import parsers.Instance;
 
 public abstract class LocalSearchSolver extends HeuristicSolver {
+    private int initialCost;
+
     public LocalSearchSolver(Instance instance) {
         super(instance);
     }
@@ -35,16 +37,28 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
     @Override
     public void solve() {
         super.shuffle();
+        this.initialCost = this.getCost();
         improvePermutation();
     }
 
     public void solveStartingFromH() {
         this.generateHPermutation();
+        this.initialCost = this.getCost();
         improvePermutation();
     }
 
     public void solveStartingFromAntiH() {
         this.generateAntiHPermutation();
+        this.initialCost = this.getCost();
         improvePermutation();
+    }
+
+    public final int getInitialCost() {
+        return this.initialCost;
+    }
+
+    public final double getInitialScore() {
+        int cost = this.getInitialCost();
+        return (double) (cost - instance.getOptimalValue()) / instance.getOptimalValue();
     }
 }

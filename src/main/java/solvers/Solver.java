@@ -21,7 +21,7 @@ public abstract class Solver {
         permutation[secondIndex] = temp;
     }
 
-    protected final void shuffle() {
+    public final void shuffle() {
         int lastIndex = permutation.length;
         Random random = new Random();
         for (int j = 0; j < permutation.length; j++) {
