@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.rmi.server.ExportException;
 
 public class Instance {
     private String name;
@@ -69,6 +67,11 @@ public class Instance {
             cost += edges[currentIndex][nextIndex];
         }
         return cost;
+    }
+
+    public double getScore(int[] solutrion) {
+        int cost = this.getCost(solutrion);
+        return (double) (cost - this.getOptimalValue()) / this.getOptimalValue();
     }
 
     /***

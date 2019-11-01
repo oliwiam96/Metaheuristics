@@ -1,6 +1,13 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Main {
     private static int MAX_COUNTER = 10;
@@ -79,25 +86,94 @@ public class Main {
     }
 
     public static int[] getGreedySolution(int[] permutation, Instance instance) {
-        int firstIndex = 0;
-        int secondIndex = 1;
-        boolean stop = false;
-        for (int i = 0; i < 10000; i++) {
-            for (int j = 0; j < instance.getDimension(); j++) {
-                if (instance.getImprovement(firstIndex, secondIndex, permutation) > 0) {
-                    swap(permutation, firstIndex, secondIndex);
+        boolean swappedAtLeastOnce;
+        do {
+            swappedAtLeastOnce = false;
+            for (int i = 0; i < instance.getDimension() - 1; i++) {
+                for (int j = i + 1; j <= instance.getDimension() - 1; j++) {
+                    if (instance.getImprovement(i, j, permutation) > 0) {
+                        swap(permutation, i, j);
+                        swappedAtLeastOnce = true;
+                    }
                 }
-                secondIndex += 1;
-                secondIndex = secondIndex % instance.getDimension();
             }
-            firstIndex += 1;
-            firstIndex = firstIndex % instance.getDimension();
-
-        }
+        } while (swappedAtLeastOnce);
         return permutation;
     }
 
+    public static int[] getSteepestSolution(int[] permutation, Instance instance) {
+        boolean swappedAtLeastOnce;
+        do {
+            swappedAtLeastOnce = false;
+            int bestFirstIndex = 0;
+            int bestSecondIndex = 1;
+            int bestImprovement = 0;
+
+            for (int i = 0; i < instance.getDimension() - 1; i++) {
+                for (int j = i + 1; j <= instance.getDimension() - 1; j++) {
+                    int currentImprovement = instance.getImprovement(i, j, permutation);
+                    if (currentImprovement > bestImprovement) {
+                        bestFirstIndex = i;
+                        bestSecondIndex = j;
+                        bestImprovement = currentImprovement;
+                    }
+                }
+            }
+
+            if (bestImprovement > 0) {
+                swap(permutation, bestFirstIndex, bestSecondIndex);
+                swappedAtLeastOnce = true;
+            }
+        } while (swappedAtLeastOnce);
+        return permutation;
+    }
+
+    public static void runTest(Path pathToTestFile) {
+        System.out.println(pathToTestFile);
+
+    }
+
+    public static void runTests() {
+        try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
+            paths
+                    .filter(Files::isRegularFile)
+                    .forEach(Main::runTest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /***
+     * Generate data to create scatter plot: initial score -> final score
+     */
+    public static void runInitialFinalTest(String instanceName) {
+        Instance instance = new Instance(new File(instanceName));
+        String outputFileName = "./Results/InitialFinalScore/"
+                + instanceName.substring(12, instanceName.length() - 5)
+                + ".csv";
+
+        try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 300; i++) {
+                int[] permutationOfIndexes = getPermutation(instance.getDimension());
+                double initialScore = instance.getScore(permutationOfIndexes);
+                sb.append(initialScore);
+                System.out.println(initialScore);
+                sb.append(", ");
+                int[] greedy = getGreedySolution(permutationOfIndexes, instance);
+                double finalScore = instance.getScore(greedy);
+                sb.append(finalScore);
+                sb.append("\n");
+            }
+            writer.write(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
+//        runTests();
+//        runInitialFinalTest("Instances/atex5.atsp");
         Instance instance = new Instance(new File("Instances/atex5.atsp"));
         int[] solution = getHeuristicSolution(instance);
 
@@ -108,8 +184,9 @@ public class Main {
 
         int[] greedy = getGreedySolution(getPermutation(instance.getDimension()), instance);
         System.out.println("Greedy: " + instance.getCost(greedy));
-        System.out.println(Arrays.toString(greedy));
 
+        int[] steepest = getSteepestSolution(getPermutation(instance.getDimension()), instance);
+        System.out.println("Steepest: " + instance.getCost(steepest));
 
         int[] greedyWithH = getGreedySolution(solution, instance);
         System.out.println("Greedy with H: " + instance.getCost(greedyWithH));
