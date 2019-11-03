@@ -1,10 +1,9 @@
 import parsers.Instance;
+import plots.InitialFinalTest;
 import solvers.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,36 +44,9 @@ public class Main {
         }
     }
 
-    /***
-     * Generate data to create scatter plot: initial score -> final score
-     */
-    public static void runInitialFinalTest(String instanceName) {
-        Instance instance = new Instance(new File(instanceName));
-        String outputFileName = "./Results/InitialFinalScore/"
-                + instanceName.substring(12, instanceName.length() - 5)
-                + ".csv";
-
-        try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 300; i++) {
-                GreedySolver greedySolver = new GreedySolver(instance);
-                greedySolver.solve();
-                double initialScore = greedySolver.getInitialScore();
-                sb.append(initialScore);
-                sb.append(", ");
-                double finalScore = greedySolver.getScore();
-                sb.append(finalScore);
-                sb.append("\n");
-            }
-            writer.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
 //        runTests();
-        runInitialFinalTest("Instances/atex1.atsp");
+        InitialFinalTest.run("Instances/dc188.atsp");
         Instance instance = new Instance(new File("Instances/atex1.atsp"));
         System.out.println("Optimal: " + instance.getOptimalValue());
 
