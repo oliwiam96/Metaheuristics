@@ -8,6 +8,12 @@ import java.util.stream.IntStream;
 
 public abstract class Solver {
     protected Instance instance;
+
+    public void setInstance(Instance instance) {
+        this.instance = instance;
+    }
+
+    protected String name;
     protected int[] permutation;
 
     public Solver(Instance instance) {
@@ -46,6 +52,10 @@ public abstract class Solver {
     public final double getScore() {
         int cost = this.getCost();
         return (double) (cost - instance.getOptimalValue()) / instance.getOptimalValue();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void printPermutation() {

@@ -5,6 +5,7 @@ import parsers.Instance;
 public class SteepestSolver extends LocalSearchSolver {
     public SteepestSolver(Instance instance) {
         super(instance);
+        this.name = "steepest";
     }
 
     @Override

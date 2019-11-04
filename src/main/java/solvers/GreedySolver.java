@@ -5,6 +5,7 @@ import parsers.Instance;
 public class GreedySolver extends LocalSearchSolver {
     public GreedySolver(Instance instance) {
         super(instance);
+        this.name = "greedy";
     }
 
     @Override

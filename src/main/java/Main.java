@@ -1,5 +1,6 @@
 import parsers.Instance;
 import plots.InitialFinalTest;
+import plots.ScoreTimeMeasurement;
 import solvers.*;
 
 import java.io.File;
@@ -7,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
@@ -14,19 +17,7 @@ public class Main {
     private static int MAX_MILLIS = 1000;
 
 
-    private static double getCJU(Solver solver) {
-        int counter = 0;
-        long startTime = System.currentTimeMillis();
-        long endTime;
 
-        do {
-            solver.solve();
-            counter += 1;
-            endTime = System.currentTimeMillis();
-        } while (endTime - startTime < MAX_MILLIS && counter < MAX_COUNTER);
-
-        return ((double) (endTime - startTime)) / counter;
-    }
 
 
     public static void runTest(Path pathToTestFile) {
@@ -48,6 +39,7 @@ public class Main {
 //        runTests();
         InitialFinalTest.run("Instances/dc188.atsp");
         Instance instance = new Instance(new File("Instances/atex1.atsp"));
+
         System.out.println("Optimal: " + instance.getOptimalValue());
 
         RandomSolver randomSolver = new RandomSolver(instance);
@@ -69,5 +61,23 @@ public class Main {
         SteepestSolver steepestSolver = new SteepestSolver(instance);
         steepestSolver.solve();
         System.out.println("Steepest: " + steepestSolver.getCost());
-    }
+
+
+        //pomiar score dla wszystkich solverów i instancji
+        try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
+            List<String> names = paths
+                    .filter(Files::isRegularFile)
+                    .map(x->x.getFileName().toString())
+                    .collect(Collectors.toList());
+            for (String name:names
+            ) {
+                ScoreTimeMeasurement.runSolvers(name);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+}
 }
