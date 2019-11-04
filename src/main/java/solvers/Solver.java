@@ -8,17 +8,16 @@ import java.util.stream.IntStream;
 
 public abstract class Solver {
     protected Instance instance;
-
-    public void setInstance(Instance instance) {
-        this.instance = instance;
-    }
-
     protected String name;
     protected int[] permutation;
 
-    public Solver(Instance instance) {
+    public void setInstance(Instance instance) {
         this.instance = instance;
         this.permutation = IntStream.range(0, instance.getDimension()).toArray();
+    }
+
+    public Solver(Instance instance) {
+        this.setInstance(instance);
     }
 
     protected final void swap(int firstIndex, int secondIndex) {

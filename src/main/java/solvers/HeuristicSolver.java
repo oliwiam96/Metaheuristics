@@ -5,8 +5,7 @@ import parsers.Instance;
 import java.util.HashSet;
 import java.util.Set;
 
-public class
-HeuristicSolver extends Solver {
+public class HeuristicSolver extends Solver {
     public HeuristicSolver(Instance instance) {
         super(instance);
         this.name = "heuristic";
