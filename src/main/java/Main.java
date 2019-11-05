@@ -1,5 +1,6 @@
 import parsers.Instance;
 import plots.InitialFinalTest;
+import plots.RestartTest;
 import plots.ScoreTimeMeasurement;
 import solvers.*;
 
@@ -37,7 +38,8 @@ public class Main {
 
     public static void main(String[] args) {
 //        runTests();
-        InitialFinalTest.run("Instances/dc188.atsp");
+        RestartTest.run("Instances/code253.atsp");
+        InitialFinalTest.run("Instances/code253.atsp");
         Instance instance = new Instance(new File("Instances/atex1.atsp"));
 
         System.out.println("Optimal: " + instance.getOptimalValue());
@@ -63,7 +65,7 @@ public class Main {
         System.out.println("Steepest: " + steepestSolver.getCost());
 
 
-        //pomiar score dla wszystkich solverów i instancji
+        // pomiar score dla wszystkich solverów i instancji
         try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
             List<String> names = paths
                     .filter(Files::isRegularFile)
