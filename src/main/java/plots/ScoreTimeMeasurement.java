@@ -22,36 +22,77 @@ public class ScoreTimeMeasurement {
         GreedySolver greedySolver = new GreedySolver(instance);
         SteepestSolver steepestSolver = new SteepestSolver(instance);
 
-        Solver[] solvers = {randomSolver,heuristicSolver,steepestSolver,greedySolver};
-
+        Solver[] solvers = {heuristicSolver,steepestSolver,greedySolver};
+        long greedyTime = 0;
         for (int i = 0; i < solvers.length; i++) {
             String outputFileName = "./Results/Scores/"
                     + solvers[i].getName()+"_"
-                    + instanceName
+                    + instance.getDimension()
                     + ".csv";
 
             try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
                 StringBuilder sb = new StringBuilder();
 
                 int counter = 0;
-                long startTime = System.currentTimeMillis();
                 long endTime;
 
                 do {
+                    long singleTime = System.nanoTime();
                     solvers[i].solve();
                     double score = solvers[i].getScore();
+                    endTime = System.nanoTime();
+
                     sb.append(score);
+                    sb.append(',');
+                    sb.append(endTime-singleTime);
                     sb.append("\n");
+                    if(solvers[i].getName()=="greedy"){
+                        greedyTime = endTime-singleTime;
+                    }
                     counter += 1;
-                    endTime = System.currentTimeMillis();
-                } while (endTime - startTime < MAX_MILLIS || counter < MAX_COUNTER);
+
+                } while (counter < MAX_COUNTER);
 
                 writer.write(sb.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
+
+        // teraz liczę random z uwzględnieniem czasu wykonania greedy
+
+        String outputFileName = "./Results/Scores/"
+                + randomSolver.getName()+"_"
+                + instance.getDimension()
+                + ".csv";
+
+        try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
+            StringBuilder sb = new StringBuilder();
+
+            int counter = 0;
+            long endTime;
+
+            do {
+                long singleTime = System.nanoTime();
+
+                randomSolver.solve(greedyTime);
+                double score =randomSolver.getScore();
+                endTime = System.nanoTime();
+
+                sb.append(score);
+                sb.append(',');
+                sb.append(endTime-singleTime);
+                sb.append("\n");
+                counter += 1;
+
+            } while (counter < MAX_COUNTER);
+
+            writer.write(sb.toString());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
+
 
 
