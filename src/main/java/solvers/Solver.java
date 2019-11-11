@@ -60,4 +60,8 @@ public abstract class Solver {
     public void printPermutation() {
         System.out.println(Arrays.toString(permutation));
     }
+
+    public int[] getPermutation() {
+        return permutation;
+    }
 }
