@@ -38,8 +38,7 @@ public class SimilarityMeasure {
             }
         }
 
-        return d[s.length][s.length];
-
+        return d[n][n];
     }
 
     private static int minimum(int a, int b, int c) {

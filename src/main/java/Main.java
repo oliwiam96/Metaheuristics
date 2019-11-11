@@ -2,7 +2,11 @@ import parsers.Instance;
 import plots.InitialFinalTest;
 import plots.RestartTest;
 import plots.ScoreTimeMeasurement;
-import solvers.*;
+import plots.SimilarityTest;
+import solvers.GreedySolver;
+import solvers.HeuristicSolver;
+import solvers.RandomSolver;
+import solvers.SteepestSolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +20,6 @@ import java.util.stream.Stream;
 public class Main {
     private static int MAX_COUNTER = 10;
     private static int MAX_MILLIS = 1000;
-
-
-
 
 
     public static void runTest(Path pathToTestFile) {
@@ -38,6 +39,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        runTests();
+        SimilarityTest.run("Instances/atex4.atsp");
         RestartTest.run("Instances/code253.atsp");
         InitialFinalTest.run("Instances/code253.atsp");
         Instance instance = new Instance(new File("Instances/atex1.atsp"));
@@ -69,9 +71,9 @@ public class Main {
         try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
             List<String> names = paths
                     .filter(Files::isRegularFile)
-                    .map(x->x.getFileName().toString())
+                    .map(x -> x.getFileName().toString())
                     .collect(Collectors.toList());
-            for (String name:names
+            for (String name : names
             ) {
                 ScoreTimeMeasurement.runSolvers(name);
             }
@@ -81,5 +83,5 @@ public class Main {
         }
 
 
-}
+    }
 }
