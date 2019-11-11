@@ -18,7 +18,7 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
     protected final int getImprovement(int firstIndex, int secondIndex) {
         int[][] edges = instance.getEdges();
         int dimension = instance.getDimension();
-        if (secondIndex - firstIndex == 1 || (firstIndex == 0 && secondIndex == (dimension - 1))) {
+        if (secondIndex - firstIndex == 1) {
             int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]]
                     + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]]
                     + edges[permutation[secondIndex]][permutation[(secondIndex + 1) % dimension]];
@@ -29,10 +29,21 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
             return costBeforeSwap - costAfterSwap;
         }
 
-        int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]]
-                + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]]
-                + edges[permutation[(secondIndex - 1 + dimension) % dimension]][permutation[secondIndex]]
-                + edges[permutation[secondIndex]][permutation[(secondIndex + 1) % dimension]];
+        if (firstIndex == 0 && secondIndex == (dimension - 1)) {
+            int costBeforeSwap = edges[permutation[dimension - 1]][permutation[0]]
+                    + edges[permutation[0]][permutation[1]]
+                    + edges[permutation[dimension - 2]][permutation[dimension - 1]];
+
+            int costAfterSwap = edges[permutation[0]][permutation[dimension - 1]]
+                    + edges[permutation[dimension - 1]][permutation[1]]
+                    + edges[permutation[dimension - 2]][permutation[0]];
+            return costBeforeSwap - costAfterSwap;
+        }
+
+        int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]] // prevFirst -> first
+                + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]] // first -> postFirst
+                + edges[permutation[(secondIndex - 1 + dimension) % dimension]][permutation[secondIndex]] // prevSecond -> second
+                + edges[permutation[secondIndex]][permutation[(secondIndex + 1) % dimension]]; // second -> postSecond
 
         int costAfterSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[secondIndex]]
                 + edges[permutation[secondIndex]][permutation[(firstIndex + 1) % dimension]]
