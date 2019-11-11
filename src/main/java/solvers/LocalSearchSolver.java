@@ -18,6 +18,16 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
     protected final int getImprovement(int firstIndex, int secondIndex) {
         int[][] edges = instance.getEdges();
         int dimension = instance.getDimension();
+        if (secondIndex - firstIndex == 1 || (firstIndex == 0 && secondIndex == (dimension - 1))) {
+            int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]]
+                    + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]]
+                    + edges[permutation[secondIndex]][permutation[(secondIndex + 1) % dimension]];
+
+            int costAfterSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[secondIndex]]
+                    + edges[permutation[secondIndex]][permutation[(firstIndex + 1) % dimension]]
+                    + edges[permutation[firstIndex]][permutation[(secondIndex + 1) % dimension]];
+            return costBeforeSwap - costAfterSwap;
+        }
 
         int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]]
                 + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]]
