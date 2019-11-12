@@ -49,13 +49,16 @@ public class ScoreTimeMeasurement {
                     sb.append(solvers[i].getSeenNum());
                     sb.append(',');
                     sb.append(solvers[i].getStepsNum());
+                    sb.append(',');
+                    sb.append(solvers[i].getCost()-instance.getOptimalValue());
                     sb.append("\n");
                     if(solvers[i].getName()=="greedy"){
-                        greedyTime = endTime-singleTime;
+                        greedyTime += endTime-singleTime;
                     }
                     counter += 1;
 
                 } while (counter < MAX_COUNTER);
+                greedyTime/= MAX_COUNTER;
 
                 writer.write(sb.toString());
             } catch (FileNotFoundException e) {
@@ -90,6 +93,8 @@ public class ScoreTimeMeasurement {
                 sb.append(randomSolver.getSeenNum());
                 sb.append(',');
                 sb.append(randomSolver.getStepsNum());
+                sb.append(',');
+                sb.append(randomSolver.getCost()-instance.getOptimalValue());
                 sb.append("\n");
                 counter += 1;
 
