@@ -34,4 +34,8 @@ public class InitialFinalTest {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        run("Instances/PK66_10.atsp");
+    }
 }
