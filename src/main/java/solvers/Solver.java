@@ -10,6 +10,8 @@ public abstract class Solver {
     protected Instance instance;
     protected String name;
     protected int[] permutation;
+    protected int stepsNum = 0;
+    protected int seenNum = 0;
 
     public void setInstance(Instance instance) {
         this.instance = instance;
@@ -63,5 +65,13 @@ public abstract class Solver {
 
     public int[] getPermutation() {
         return permutation;
+    }
+
+    public int getStepsNum() {
+        return stepsNum;
+    }
+
+    public int getSeenNum() {
+        return seenNum;
     }
 }

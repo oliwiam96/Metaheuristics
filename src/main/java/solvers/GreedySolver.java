@@ -15,8 +15,10 @@ public class GreedySolver extends LocalSearchSolver {
             swappedAtLeastOnce = false;
             for (int i = 0; i < instance.getDimension() - 1; i++) {
                 for (int j = i + 1; j <= instance.getDimension() - 1; j++) {
+                    this.seenNum++;
                     if (this.getImprovement(i, j) > 0) {
                         swap(i, j);
+                        this.stepsNum++;
                         swappedAtLeastOnce = true;
                     }
                 }

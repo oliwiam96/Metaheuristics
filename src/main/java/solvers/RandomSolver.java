@@ -19,7 +19,7 @@ public class RandomSolver extends Solver {
 
     public void solve(long time)
     {
-        int i=0;
+//        int i=0;
         long start = System.nanoTime();
         do{
             this.shuffle();
@@ -29,9 +29,9 @@ public class RandomSolver extends Solver {
                 this.bestPermutation = this.permutation.clone();
                 this.bestScore = currentScore;
             }
-            i++;
+//            i++;
         }while(System.nanoTime()-start<time);
-        System.out.println(i);
+//        System.out.println(i);
         this.permutation = this.bestPermutation;
     }
 }

@@ -19,11 +19,13 @@ public class SteepestSolver extends LocalSearchSolver {
 
             for (int i = 0; i < instance.getDimension() - 1; i++) {
                 for (int j = i + 1; j <= instance.getDimension() - 1; j++) {
+                    this.seenNum++;
                     int currentImprovement = getImprovement(i, j);
                     if (currentImprovement > bestImprovement) {
                         bestFirstIndex = i;
                         bestSecondIndex = j;
                         bestImprovement = currentImprovement;
+                        this.stepsNum++;
                     }
                 }
             }

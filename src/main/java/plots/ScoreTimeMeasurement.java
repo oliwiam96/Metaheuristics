@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 public class ScoreTimeMeasurement {
 
     private static final int MAX_MILLIS = 1000;
-    private static final int MAX_COUNTER = 10;
+    private static final int MAX_COUNTER = 350;
 
     /***
      * Generate data to create scatter plot: initial score -> final score
@@ -45,6 +45,10 @@ public class ScoreTimeMeasurement {
                     sb.append(score);
                     sb.append(',');
                     sb.append(endTime-singleTime);
+                    sb.append(',');
+                    sb.append(solvers[i].getSeenNum());
+                    sb.append(',');
+                    sb.append(solvers[i].getStepsNum());
                     sb.append("\n");
                     if(solvers[i].getName()=="greedy"){
                         greedyTime = endTime-singleTime;
@@ -82,6 +86,10 @@ public class ScoreTimeMeasurement {
                 sb.append(score);
                 sb.append(',');
                 sb.append(endTime-singleTime);
+                sb.append(',');
+                sb.append(randomSolver.getSeenNum());
+                sb.append(',');
+                sb.append(randomSolver.getStepsNum());
                 sb.append("\n");
                 counter += 1;
 
