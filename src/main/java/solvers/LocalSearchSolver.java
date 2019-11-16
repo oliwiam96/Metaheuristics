@@ -5,7 +5,6 @@ import parsers.Instance;
 public abstract class LocalSearchSolver extends HeuristicSolver {
     private int initialCost;
 
-
     public LocalSearchSolver(Instance instance) {
         super(instance);
     }
