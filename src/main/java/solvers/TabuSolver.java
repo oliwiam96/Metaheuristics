@@ -2,6 +2,7 @@ package solvers;
 
 import parsers.Instance;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,15 +11,19 @@ public class TabuSolver extends LocalSearchSolver {
     protected int[] bestPermutation;
     private int currentCost;
     private int[][] tabuMatrix;
-    private final int MAX_TABU_ITER = 30; // how many iterations element is "tabu" // TODO adjust to matrix size -> O(n^2) but less than number of iterations
-    private int k = 10; // max tabu list length // TODO adjust to matrix size
+    private int MAX_TABU_ITER; // how many iterations element is "tabu" // TODO adjust to matrix size -> O(n^2) but less than number of iterations
+    private int k; // max tabu list length // TODO adjust to matrix size
     private List<Element> masterList = new ArrayList<>();
     private int threshold = -1000; // when master list should be rebuilt // TODO adjust to avg cost
+    private int MAX_NO_IMPROVEMENT;
 
     public TabuSolver(Instance instance) {
         super(instance);
         this.name = "tabu";
         tabuMatrix = new int[instance.getDimension()][instance.getDimension()];
+        k = instance.getDimension() / 10;
+        MAX_TABU_ITER = instance.getDimension() / 4;
+        MAX_NO_IMPROVEMENT = 9 * instance.getDimension() * instance.getDimension() * 2;
     }
 
     public class Element {
@@ -149,31 +154,44 @@ public class TabuSolver extends LocalSearchSolver {
     protected void improvePermutation() {
         int MAX_ITER = 10000;//* instance.getDimension() * instance.getDimension();
         int iterationNumber = 0;
+        int noImprovementIterationNumber = 0;
 
         this.currentCost = getInitialCost();
         this.bestCost = currentCost;
         buildMasterList();
-
+        Element previousElement = null;
+        threshold = (-3) * this.getCost() / instance.getDimension();
+        
         do {
             Element element = getBestElement();
             masterList.remove(element);
             updateTabuMatrix(element);
-            if (currentCost != this.getCost()) {
-                System.out.println("problem"); // TODO debug this because sometimes it happens :/ sth wrong with getImprovement()
-            }
 
             // System.out.println("improvement: " + this.getImprovement(element.firstIndex, element.secondIndex) + " currentCost: " + currentCost + " cost: " + this.getCost());
             currentCost -= this.getImprovement(element.firstIndex, element.secondIndex);
+            previousElement = element;
             swap(element.firstIndex, element.secondIndex);
 
             if (currentCost < bestCost) {
                 bestCost = currentCost;
                 bestPermutation = Arrays.copyOf(permutation, permutation.length);
+                noImprovementIterationNumber = 0;
+            } else {
+                noImprovementIterationNumber += 1;
             }
 
             iterationNumber += 1;
-        } while (iterationNumber < MAX_ITER);
+        } while (noImprovementIterationNumber < MAX_NO_IMPROVEMENT);
 
         this.permutation = bestPermutation;
+    }
+
+    public static void main(String[] args) {
+        Instance instance = new Instance(new File("Instances/atex5.atsp"));
+
+        TabuSolver tabuSolver = new TabuSolver(instance);
+        tabuSolver.solve();
+        System.out.println("Tabu: " + tabuSolver.getCost());
+
     }
 }
