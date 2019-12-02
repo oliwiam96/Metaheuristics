@@ -4,7 +4,7 @@ import solvers.Solver;
 
 import java.util.Arrays;
 
-public class SimilarityMeasure {
+public class LevenshteinMeasure {
 
     public static int getLevenshteinDistance(Solver firstSolution, Solver secondSolution) {
         int[] s = firstSolution.getPermutation();

@@ -1,6 +1,6 @@
 package plots;
 
-import metrics.SimilarityMeasure;
+import metrics.LocalSimilarityMeasure;
 import parsers.Instance;
 import solvers.GreedySolver;
 import solvers.HeuristicSolver;
@@ -54,17 +54,17 @@ public class SimilarityTest {
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-                int greedyDistance = SimilarityMeasure.getLevenshteinDistance(greedySolutions.get(i), bestSolution);
+                double greedySimilarity = LocalSimilarityMeasure.getSimilarity(greedySolutions.get(i), bestSolution);
                 double greedyScore = greedySolutions.get(i).getScore();
 
-                int steepestDistance = SimilarityMeasure.getLevenshteinDistance(steepestSolutions.get(i), bestSolution);
+                double steepestSimilarity = LocalSimilarityMeasure.getSimilarity(steepestSolutions.get(i), bestSolution);
                 double steepestScore = steepestSolutions.get(i).getScore();
 
-                sb.append(greedyDistance);
+                sb.append(greedySimilarity);
                 sb.append(", ");
                 sb.append(greedyScore);
                 sb.append(", ");
-                sb.append(steepestDistance);
+                sb.append(steepestSimilarity);
                 sb.append(", ");
                 sb.append(steepestScore);
                 sb.append("\n");
@@ -86,7 +86,7 @@ public class SimilarityTest {
 
     private static void runFrom(String instanceName, boolean H) {
         Instance instance = new Instance(new File(instanceName));
-        String outputFileName = "./Results/Similarity/" + "from" + (H ? "H" : "AntiH")  + "_"
+        String outputFileName = "./Results/Similarity/" + "from" + (H ? "H" : "AntiH") + "_"
                 + instanceName.substring(10, instanceName.length() - 5)
                 + ".csv";
 
@@ -109,10 +109,10 @@ public class SimilarityTest {
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-                int greedyDistance = SimilarityMeasure.getLevenshteinDistance(greedySolutions.get(i), bestSolution);
+                double greedySimiliarity = LocalSimilarityMeasure.getSimilarity(greedySolutions.get(i), bestSolution);
                 double greedyScore = greedySolutions.get(i).getScore();
 
-                sb.append(greedyDistance);
+                sb.append(greedySimiliarity);
                 sb.append(", ");
                 sb.append(greedyScore);
                 sb.append("\n");
@@ -145,10 +145,10 @@ public class SimilarityTest {
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < NUMBER_OF_POINTS; i++) {
-                int greedyDistance = SimilarityMeasure.getLevenshteinDistance(greedySolutions.get(i), bestSolution);
+                double greedySimilarity = LocalSimilarityMeasure.getSimilarity(greedySolutions.get(i), bestSolution);
                 double greedyScore = greedySolutions.get(i).getScore();
 
-                sb.append(greedyDistance);
+                sb.append(greedySimilarity);
                 sb.append(", ");
                 sb.append(greedyScore);
                 sb.append("\n");
@@ -161,7 +161,8 @@ public class SimilarityTest {
     }
 
     public static void main(String[] args) {
-        SimilarityTest.runFromH("Instances/code253.atsp");
+        SimilarityTest.run("Instances/code253.atsp");
+        SimilarityTest.run("Instances/atex1.atsp");
         SimilarityTest.runFromH("Instances/atex1.atsp");
         SimilarityTest.runFromAntyH("Instances/atex1.atsp");
         SimilarityTest.runOnlyH("Instances/atex1.atsp");
