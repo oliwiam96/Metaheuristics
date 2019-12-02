@@ -33,37 +33,38 @@ public class Main {
 //        SimilarityTest.run("Instances/atex4.atsp");
 //        RestartTest.run("Instances/code253.atsp");
 //        InitialFinalTest.run("Instances/code253.atsp");
-        Instance instance = new Instance(new File("Instances/PK131_2.atsp"));
+        Instance instance = new Instance(new File("Instances/code253.atsp"));
 
         System.out.println("Optimal: " + instance.getOptimalValue());
 
-        RandomSolver randomSolver = new RandomSolver(instance);
-        randomSolver.solve();
-        System.out.println("Random: " + randomSolver.getCost());
-
+//        RandomSolver randomSolver = new RandomSolver(instance);
+//        randomSolver.solve();
+//        System.out.println("Random: " + randomSolver.getCost());
+//
         HeuristicSolver heuristicSolver = new HeuristicSolver(instance);
         heuristicSolver.solve();
         System.out.println("Heuristic: " + heuristicSolver.getCost());
-
-        GreedySolver greedySolver = new GreedySolver(instance);
-        greedySolver.solve();
-        System.out.println("Greedy: " + greedySolver.getCost());
-        greedySolver.solveStartingFromH();
-        System.out.println("Greedy with H: " + greedySolver.getCost());
-        greedySolver.solveStartingFromAntiH();
-        System.out.println("Greedy with antiH: " + greedySolver.getCost());
-
-        SteepestSolver steepestSolver = new SteepestSolver(instance);
-        steepestSolver.solve();
-        System.out.println("Steepest: " + steepestSolver.getCost());
-
+//
+//        GreedySolver greedySolver = new GreedySolver(instance);
+//        greedySolver.solve();
+//        System.out.println("Greedy: " + greedySolver.getCost());
+//        greedySolver.solveStartingFromH();
+//        System.out.println("Greedy with H: " + greedySolver.getCost());
+//        greedySolver.solveStartingFromAntiH();
+//        System.out.println("Greedy with antiH: " + greedySolver.getCost());
+//
+//        SteepestSolver steepestSolver = new SteepestSolver(instance);
+//        steepestSolver.solve();
+//        System.out.println("Steepest: " + steepestSolver.getCost());
+//        SAParameters parameters = new SAParameters();
+//        parameters.test();
         SimulatedAnnealingSolver simulatedAnnealingSolver = new SimulatedAnnealingSolver(instance);
         simulatedAnnealingSolver.solve();
         System.out.println("Simulated annealing: " + simulatedAnnealingSolver.getCost());
 
-        TabuSolver tabuSolver = new TabuSolver(instance);
-        tabuSolver.solve();
-        System.out.println("Tabu: " + tabuSolver.getCost());
+//        TabuSolver tabuSolver = new TabuSolver(instance);
+//        tabuSolver.solve();
+//        System.out.println("Tabu: " + tabuSolver.getCost());
 
 
         // pomiar score dla wszystkich solverów i instancji
