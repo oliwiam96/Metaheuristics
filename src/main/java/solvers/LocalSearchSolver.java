@@ -24,7 +24,7 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
                     + edges[permutation[secondIndex]][permutation[(secondIndex + 1) % dimension]];
 
             int costAfterSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[secondIndex]]
-                    + edges[permutation[secondIndex]][permutation[(firstIndex + 1) % dimension]]
+                    + edges[permutation[secondIndex]][permutation[(firstIndex) % dimension]]
                     + edges[permutation[firstIndex]][permutation[(secondIndex + 1) % dimension]];
             return costBeforeSwap - costAfterSwap;
         }
