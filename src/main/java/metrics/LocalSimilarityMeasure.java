@@ -1,8 +1,8 @@
 package metrics;
 
-import javafx.util.Pair;
 import solvers.Solver;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,18 +14,18 @@ public class LocalSimilarityMeasure {
     }
 
     public static double getSimilarity(int[] s, int[] t) {
-        Set<Pair<Integer, Integer>> sPairs = new HashSet<>();
-        Set<Pair<Integer, Integer>> tPairs = new HashSet<>();
+        Set<SimpleEntry<Integer, Integer>> sPairs = new HashSet<>();
+        Set<SimpleEntry<Integer, Integer>> tPairs = new HashSet<>();
 
         for (int i = 0; i < s.length; i++) {
-            sPairs.add(new Pair<>(s[i], s[(i+1)%s.length]));
-            tPairs.add(new Pair<>(t[i], t[(i + 1) % t.length]));
+            sPairs.add(new SimpleEntry<>(s[i], s[(i + 1) % s.length]));
+            tPairs.add(new SimpleEntry<>(t[i], t[(i + 1) % t.length]));
         }
 
-        Set<Pair<Integer, Integer>> intersection = new HashSet<>(sPairs);
+        Set<SimpleEntry<Integer, Integer>> intersection = new HashSet<>(sPairs);
         intersection.retainAll(tPairs);
 
-        return (double) intersection.size()/ s.length;
+        return (double) intersection.size() / s.length;
     }
 
     public static void main(String[] args) {
