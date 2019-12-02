@@ -2,27 +2,24 @@ package solvers;
 
 import parsers.Instance;
 
+import java.util.Random;
 
-public class RandomSolver extends Solver {
-
-    protected int[] bestPermutation;
-    protected double bestScore = Double.MAX_VALUE;
-    public RandomSolver(Instance instance) {
+public class RandomWalkSolver extends RandomSolver {
+    public RandomWalkSolver(Instance instance) {
         super(instance);
-        this.name = "random";
-    }
-
-    @Override
-    public void solve() {
-        this.shuffle();
+        this.name = "rwalk";
     }
 
     public void solve(long time)
     {
 //        int i=0;
+        this.shuffle();
+        Random random = new Random();
         long start = System.nanoTime();
         do{
-            this.shuffle();
+            int i = random.nextInt(instance.getDimension());
+            int j = random.nextInt(instance.getDimension());
+            this.swap(i,j);
             double currentScore = this.getScore();
             if(currentScore<this.bestScore)
             {

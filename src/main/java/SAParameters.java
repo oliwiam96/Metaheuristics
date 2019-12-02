@@ -7,16 +7,16 @@ public class SAParameters {
 
     public void test()
     {
-        Instance instance = new Instance(new File("Instances/code253.atsp"));
+        Instance instance = new Instance(new File("Instances/atex4.atsp"));
 
         int MAXV = Integer.MAX_VALUE;
         SimulatedAnnealingSolver test = new SimulatedAnnealingSolver(instance);
-        double temperatures[] = {test.getCost(),test.getCost()/instance.getDimension(),test.getCost()/2};
+        double temperatures[] = {test.getCost()/instance.getDimension(),(test.getCost()/instance.getDimension())*8,(test.getCost()/instance.getDimension())/2};
         int size = instance.getDimension()*instance.getDimension();
         int max_iters[] = {size/2};
         int avg = 0;
-        int ps[] = {(int)Math.sqrt(instance.getDimension()),6,7,8,9,10,11};
-        int markovs[] = {instance.getDimension()*2,instance.getDimension()*instance.getDimension(),instance.getDimension()*instance.getDimension()*4};
+        int ps[] = {11,10,9,8,7,6,5};
+        int markovs[] = {instance.getDimension()*2,instance.getDimension()*instance.getDimension(),instance.getDimension()*instance.getDimension()*2};
         int execs = 20;
 
         for(int a=0;a<temperatures.length;a++)

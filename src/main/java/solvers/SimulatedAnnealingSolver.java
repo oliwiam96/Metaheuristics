@@ -34,13 +34,13 @@ public class SimulatedAnnealingSolver extends LocalSearchSolver {
     @Override
     protected void improvePermutation() {
         Random random = new Random();
-        temperature = this.getCost()/instance.getDimension();
+        temperature = (this.getCost()/instance.getDimension())*2;
         int iterationNumber = 0;
         MAX_ITER = 2000 * instance.getDimension() * instance.getDimension();
         L_MARKOV_CHAIN_LENGTH = instance.getDimension()*instance.getDimension()*2;
         P_NO_IMPROVEMENT = 9;
         int lMarkov = 0;
-        try (PrintWriter writer = new PrintWriter(new File("test.csv"))) {
+//        try (PrintWriter writer = new PrintWriter(new File("test.csv"))) {
             StringBuilder sb = new StringBuilder();
             int noImprovementIterationNumber = 0;
             do {
@@ -69,14 +69,13 @@ public class SimulatedAnnealingSolver extends LocalSearchSolver {
                         }
                     }
                 }
-            sb.append(this.getCost());
-                sb.append("\n");
+//            sb.append(this.getCost());
+//                sb.append("\n");
             } while (temperature > 0.01 && noImprovementIterationNumber <= P_NO_IMPROVEMENT * L_MARKOV_CHAIN_LENGTH);
-        System.out.println(iterationNumber);
-        System.out.println(temperature);
-            writer.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+//        System.out.println(iterationNumber);
+//        System.out.println(temperature);
+//            writer.write(sb.toString());
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
         }
     }
-}

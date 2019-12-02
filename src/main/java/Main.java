@@ -1,4 +1,5 @@
 import parsers.Instance;
+import plots.ScoreTimeMeasurement;
 import solvers.*;
 
 import java.io.File;
@@ -6,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
@@ -33,7 +36,7 @@ public class Main {
 //        SimilarityTest.run("Instances/atex4.atsp");
 //        RestartTest.run("Instances/code253.atsp");
 //        InitialFinalTest.run("Instances/code253.atsp");
-        Instance instance = new Instance(new File("Instances/code253.atsp"));
+        Instance instance = new Instance(new File("Instances/atex4.atsp"));
 
         System.out.println("Optimal: " + instance.getOptimalValue());
 
@@ -58,9 +61,9 @@ public class Main {
 //        System.out.println("Steepest: " + steepestSolver.getCost());
 //        SAParameters parameters = new SAParameters();
 //        parameters.test();
-        SimulatedAnnealingSolver simulatedAnnealingSolver = new SimulatedAnnealingSolver(instance);
-        simulatedAnnealingSolver.solve();
-        System.out.println("Simulated annealing: " + simulatedAnnealingSolver.getCost());
+//        SimulatedAnnealingSolver simulatedAnnealingSolver = new SimulatedAnnealingSolver(instance);
+//        simulatedAnnealingSolver.solve();
+//        System.out.println("Simulated annealing: " + simulatedAnnealingSolver.getCost());
 
 //        TabuSolver tabuSolver = new TabuSolver(instance);
 //        tabuSolver.solve();
@@ -68,18 +71,18 @@ public class Main {
 
 
         // pomiar score dla wszystkich solverów i instancji
-//        try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
-//            List<String> names = paths
-//                    .filter(Files::isRegularFile)
-//                    .map(x -> x.getFileName().toString())
-//                    .collect(Collectors.toList());
-//            for (String name : names
-//            ) {
-//                ScoreTimeMeasurement.runSolvers(name);
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try (Stream<Path> paths = Files.walk(Paths.get("./Instances/"))) {
+            List<String> names = paths
+                    .filter(Files::isRegularFile)
+                    .map(x -> x.getFileName().toString())
+                    .collect(Collectors.toList());
+            for (String name : names
+            ) {
+                ScoreTimeMeasurement.runSolvers(name);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
