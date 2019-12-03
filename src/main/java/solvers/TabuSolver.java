@@ -11,10 +11,10 @@ public class TabuSolver extends LocalSearchSolver {
     protected int[] bestPermutation;
     private int currentCost;
     private int[][] tabuMatrix;
-    private int MAX_TABU_ITER; // how many iterations element is "tabu" // TODO adjust to matrix size -> O(n^2) but less than number of iterations
-    private int k; // max tabu list length // TODO adjust to matrix size
+    private int MAX_TABU_ITER; // how many iterations element is "tabu"
+    private int k; // max tabu list length
     private List<Element> masterList = new ArrayList<>();
-    private int threshold = -1000; // when master list should be rebuilt // TODO adjust to avg cost
+    private int threshold = -1000; // when master list should be rebuilt
     private int MAX_NO_IMPROVEMENT;
 
     public TabuSolver(Instance instance) {
@@ -23,7 +23,7 @@ public class TabuSolver extends LocalSearchSolver {
         tabuMatrix = new int[instance.getDimension()][instance.getDimension()];
         k = instance.getDimension() / 10;
         MAX_TABU_ITER = instance.getDimension() / 4;
-        MAX_NO_IMPROVEMENT = 9 * instance.getDimension() * instance.getDimension() * 2;
+        MAX_NO_IMPROVEMENT = instance.getDimension() * 16;
     }
 
     public class Element {
@@ -52,15 +52,14 @@ public class TabuSolver extends LocalSearchSolver {
         for (int i = 0; i < instance.getDimension() - 1; i++) {
             for (int j = i + 1; j <= instance.getDimension() - 1; j++) {
                 Element element = new Element(i, j, getImprovement(i, j));
+                this.seenNum++;
                 masterList.add(element);
             }
         }
 
-        // Collections.shuffle(masterList); // TODO consider this when all top improvements are "0"
         sortMasterList();
         updateMasterListTabuFactors();
         masterList = masterList.stream().filter(this::isNotTabu).collect(Collectors.toList());
-        // masterList = masterList.stream().filter(element -> element.improvement != 0).collect(Collectors.toList()); // TODO consider this
         masterList = masterList.subList(0, k);
     }
 
@@ -108,24 +107,6 @@ public class TabuSolver extends LocalSearchSolver {
             buildMasterList();
             return masterList.get(0);
         }
-
-//        if (acceptedMasterList.size() == 0 || acceptedMasterList.get(0).improvement < threshold) {
-//            // should find new master list
-//
-//
-//            List<Element> newAcceptedMasterList = masterList.stream().filter(this::isNotTabu).collect(Collectors.toList());
-//
-//            if(newAcceptedMasterList.size() > 0) {
-//                return newAcceptedMasterList.get(0);
-//            } else {
-//                // supposed aspiration (all moves are tabu moves so pick the least tabu move)
-//                masterList.sort(Comparator.comparing(Element::getTabuFactor));
-//                return masterList.get(0);
-//            }
-//
-//        } else {
-//            return acceptedMasterList.get(0);
-//        }
     }
 
     private void updateTabuMatrix(Element element) {
@@ -152,8 +133,6 @@ public class TabuSolver extends LocalSearchSolver {
 
     @Override
     protected void improvePermutation() {
-        int MAX_ITER = 10000;//* instance.getDimension() * instance.getDimension();
-        int iterationNumber = 0;
         int noImprovementIterationNumber = 0;
 
         this.currentCost = getInitialCost();
@@ -161,17 +140,14 @@ public class TabuSolver extends LocalSearchSolver {
         buildMasterList();
         Element previousElement = null;
         threshold = (-3) * this.getCost() / instance.getDimension();
-        
+
         do {
             Element element = getBestElement();
             masterList.remove(element);
             updateTabuMatrix(element);
 
-            // System.out.println("improvement: " + this.getImprovement(element.firstIndex, element.secondIndex) + " currentCost: " + currentCost + " cost: " + this.getCost());
             currentCost -= this.getImprovement(element.firstIndex, element.secondIndex);
-            previousElement = element;
             swap(element.firstIndex, element.secondIndex);
-
             if (currentCost < bestCost) {
                 bestCost = currentCost;
                 bestPermutation = Arrays.copyOf(permutation, permutation.length);
@@ -180,18 +156,8 @@ public class TabuSolver extends LocalSearchSolver {
                 noImprovementIterationNumber += 1;
             }
 
-            iterationNumber += 1;
         } while (noImprovementIterationNumber < MAX_NO_IMPROVEMENT);
 
         this.permutation = bestPermutation;
-    }
-
-    public static void main(String[] args) {
-        Instance instance = new Instance(new File("Instances/atex5.atsp"));
-
-        TabuSolver tabuSolver = new TabuSolver(instance);
-        tabuSolver.solve();
-        System.out.println("Tabu: " + tabuSolver.getCost());
-
     }
 }

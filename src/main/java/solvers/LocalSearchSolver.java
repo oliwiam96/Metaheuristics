@@ -19,7 +19,7 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
         int[][] edges = instance.getEdges();
         int dimension = instance.getDimension();
 
-        if(firstIndex == secondIndex) {
+        if (firstIndex == secondIndex) {
             return 0;
         }
 
@@ -29,7 +29,7 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
             firstIndex = secondIndex;
             secondIndex = temp;
         }
-        
+
         if (secondIndex - firstIndex == 1) {
             int costBeforeSwap = edges[permutation[(firstIndex - 1 + dimension) % dimension]][permutation[firstIndex]]
                     + edges[permutation[firstIndex]][permutation[(firstIndex + 1) % dimension]]
@@ -71,6 +71,8 @@ public abstract class LocalSearchSolver extends HeuristicSolver {
     public void solve() {
         super.shuffle();
         this.initialCost = this.getCost();
+        this.stepsNum = 0;
+        this.seenNum = 0;
         improvePermutation();
     }
 

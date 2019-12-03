@@ -10,24 +10,22 @@ public class RandomWalkSolver extends RandomSolver {
         this.name = "rwalk";
     }
 
-    public void solve(long time)
-    {
-//        int i=0;
+    public void solve(long time) {
+        this.seenNum = 0;
         this.shuffle();
         Random random = new Random();
         long start = System.nanoTime();
-        do{
+        do {
             int i = random.nextInt(instance.getDimension());
             int j = random.nextInt(instance.getDimension());
-            this.swap(i,j);
-            double currentScore = this.getScore();
-            if(currentScore<this.bestScore)
-            {
+            double improvement = this.getImprovement(i, j);
+            this.swap(i, j);
+            this.seenNum++;
+            if (improvement > 0) {
                 this.bestPermutation = this.permutation.clone();
-                this.bestScore = currentScore;
             }
 //            i++;
-        }while(System.nanoTime()-start<time);
+        } while (System.nanoTime() - start < time);
 //        System.out.println(i);
         this.permutation = this.bestPermutation;
     }

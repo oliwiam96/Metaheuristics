@@ -16,19 +16,20 @@ public class ScoreTimeMeasurement {
      * Generate data to create scatter plot: initial score -> final score
      */
     public static void runSolvers(String instanceName) {
-        Instance instance = new Instance(new File("Instances/"+instanceName));
+        Instance instance = new Instance(new File("Instances/" + instanceName));
         RandomSolver randomSolver = new RandomSolver(instance);
         RandomWalkSolver randomWalkSolver = new RandomWalkSolver(instance);
         HeuristicSolver heuristicSolver = new HeuristicSolver(instance);
         GreedySolver greedySolver = new GreedySolver(instance);
         SteepestSolver steepestSolver = new SteepestSolver(instance);
         SimulatedAnnealingSolver saSolver = new SimulatedAnnealingSolver(instance);
+        TabuSolver tabuSolver = new TabuSolver(instance);
 
-        Solver[] solvers = {heuristicSolver,steepestSolver,saSolver,greedySolver};
+        Solver[] solvers = {heuristicSolver, steepestSolver, saSolver, tabuSolver, greedySolver};
         long greedyTime = 0;
         for (int i = 0; i < solvers.length; i++) {
             String outputFileName = "./Results/Scores/"
-                    + solvers[i].getName()+"_"
+                    + solvers[i].getName() + "_"
                     + instance.getDimension()
                     + ".csv";
 
@@ -46,21 +47,21 @@ public class ScoreTimeMeasurement {
 
                     sb.append(score);
                     sb.append(',');
-                    sb.append(endTime-singleTime);
+                    sb.append(endTime - singleTime);
                     sb.append(',');
                     sb.append(solvers[i].getSeenNum());
                     sb.append(',');
                     sb.append(solvers[i].getStepsNum());
                     sb.append(',');
-                    sb.append(solvers[i].getCost()-instance.getOptimalValue());
+                    sb.append(solvers[i].getCost() - instance.getOptimalValue());
                     sb.append("\n");
-                    if(solvers[i].getName()=="greedy"){
-                        greedyTime += endTime-singleTime;
+                    if (solvers[i].getName() == "greedy") {
+                        greedyTime += endTime - singleTime;
                     }
                     counter += 1;
 
                 } while (counter < MAX_COUNTER);
-                greedyTime/= MAX_COUNTER;
+                greedyTime /= MAX_COUNTER;
 
                 writer.write(sb.toString());
             } catch (FileNotFoundException e) {
@@ -69,45 +70,45 @@ public class ScoreTimeMeasurement {
         }
 
         // teraz liczę random z uwzględnieniem czasu wykonania greedy
-        RandomSolver[] randomSolvers ={randomWalkSolver,randomSolver};
+        RandomSolver[] randomSolvers = {randomWalkSolver, randomSolver};
         for (int i = 0; i < randomSolvers.length; i++) {
             String outputFileName = "./Results/Scores/"
-                    + randomSolvers[i].getName()+"_"
+                    + randomSolvers[i].getName() + "_"
                     + instance.getDimension()
                     + ".csv";
 
-        try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
-            StringBuilder sb = new StringBuilder();
+            try (PrintWriter writer = new PrintWriter(new File(outputFileName))) {
+                StringBuilder sb = new StringBuilder();
 
-            int counter = 0;
-            long endTime;
+                int counter = 0;
+                long endTime;
 
-            do {
-                long singleTime = System.nanoTime();
+                do {
+                    long singleTime = System.nanoTime();
 
-                randomSolvers[i].solve(greedyTime);
-                double score = randomSolver.getScore();
-                endTime = System.nanoTime();
+                    randomSolvers[i].solve(greedyTime);
+                    double score = randomSolvers[i].getScore();
+                    endTime = System.nanoTime();
 
-                sb.append(score);
-                sb.append(',');
-                sb.append(endTime - singleTime);
-                sb.append(',');
-                sb.append(randomSolver.getSeenNum());
-                sb.append(',');
-                sb.append(randomSolver.getStepsNum());
-                sb.append(',');
-                sb.append(randomSolver.getCost() - instance.getOptimalValue());
-                sb.append("\n");
-                counter += 1;
+                    sb.append(score);
+                    sb.append(',');
+                    sb.append(endTime - singleTime);
+                    sb.append(',');
+                    sb.append(randomSolvers[i].getSeenNum());
+                    sb.append(',');
+                    sb.append(randomSolvers[i].getStepsNum());
+                    sb.append(',');
+                    sb.append(randomSolvers[i].getCost() - instance.getOptimalValue());
+                    sb.append("\n");
+                    counter += 1;
 
-            } while (counter < MAX_COUNTER);
+                } while (counter < MAX_COUNTER);
 
-            writer.write(sb.toString());
+                writer.write(sb.toString());
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

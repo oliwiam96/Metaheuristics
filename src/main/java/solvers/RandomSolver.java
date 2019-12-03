@@ -3,13 +3,19 @@ package solvers;
 import parsers.Instance;
 
 
-public class RandomSolver extends Solver {
+public class RandomSolver extends LocalSearchSolver {
 
     protected int[] bestPermutation;
     protected double bestScore = Double.MAX_VALUE;
+
     public RandomSolver(Instance instance) {
         super(instance);
         this.name = "random";
+    }
+
+    @Override
+    protected void improvePermutation() {
+
     }
 
     @Override
@@ -17,21 +23,18 @@ public class RandomSolver extends Solver {
         this.shuffle();
     }
 
-    public void solve(long time)
-    {
-//        int i=0;
+    public void solve(long time) {
+        this.seenNum = 0;
         long start = System.nanoTime();
-        do{
+        do {
             this.shuffle();
+            this.seenNum++;
             double currentScore = this.getScore();
-            if(currentScore<this.bestScore)
-            {
+            if (currentScore < this.bestScore) {
                 this.bestPermutation = this.permutation.clone();
                 this.bestScore = currentScore;
             }
-//            i++;
-        }while(System.nanoTime()-start<time);
-//        System.out.println(i);
+        } while (System.nanoTime() - start < time);
         this.permutation = this.bestPermutation;
     }
 }
